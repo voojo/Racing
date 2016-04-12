@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ImageBrush x:Key="BackgroundImage" ImageSource="Content/Road.jpg" />
+        <ImageBrush x:Key="Banana" ImageSource="Content/Banana.png" />
+        <ImageBrush x:Key="OrangeCar" ImageSource="Content/Car.png" />
+        <ImageBrush x:Key="BlueCar" ImageSource="Content/Car2.png" />
+        <ImageBrush x:Key="RedCar" ImageSource="Content/Car3.png" />
+        <ImageBrush x:Key="YellowCar" ImageSource="Content/Car4.png" />
     </Application.Resources>
 </Application>
