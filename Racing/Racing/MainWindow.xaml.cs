@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Racing.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,10 @@ namespace Racing
     {
         public MainWindow()
         {
+        
             InitializeComponent();
+            DataContext = new RaceViewModel();        
         }
+
     }
 }

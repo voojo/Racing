@@ -1,7 +1,25 @@
 ﻿<Window x:Class="Racing.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="300" Width="1100" >
+        Title="MainWindow" Height="330" Width="1100" 
+    >
     <Grid Background="{StaticResource BackgroundImage}">
+        <Image Source="Content/Banana.png" Width="103" Height="54"></Image>
+        <Image Source="Content/Coin.png" Width="103" Height="54"></Image>
+        <Canvas>
+            <Image Source="Content/Car.png" Width="103" Height="54" Canvas.Left="{Binding OrangeCarActualPositionX}" Canvas.Top="{Binding OrangeCarActualPositionY}" ></Image>
+        </Canvas>
+        <Canvas>
+            <Image Source="Content/Car2.png" Width="103" Height="54" Canvas.Left="{Binding BlueCarActualPositionX}" Canvas.Top="{Binding BlueCarActualPositionY}"></Image>
+        </Canvas>
+        <Canvas>
+            <Image Source="Content/Car3.png" Width="103" Height="54" Canvas.Left="{Binding RedCarActualPositionX}" Canvas.Top="{Binding RedCarActualPositionY}"></Image>
+        </Canvas>
+        <Canvas>
+            <Image Source="Content/Car4.png" Width="103" Height="54" Canvas.Left="{Binding YellowCarActualPositionX}" Canvas.Top="{Binding YellowCarActualPositionY}"></Image>
+        </Canvas>
+        
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Command="{Binding StartRaceCommand}">Rozpocznij</Button>
+        
     </Grid>
 </Window>
