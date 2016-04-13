@@ -22,7 +22,7 @@
             <Image Source="Content/Car4.png" Width="103" Height="54" Canvas.Left="{Binding YellowCarActualPositionX}" Canvas.Top="{Binding YellowCarActualPositionY}"></Image>
         </Canvas>
 
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Command="{Binding StartRaceCommand}" Visibility="{Binding Path=StarButtonIsVisible, Converter={StaticResource BoolToVisibility}}" >Rozpocznij</Button>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Command="{Binding StartRaceCommand}" Visibility="{Binding Path=StartButtonIsVisible, Converter={StaticResource BoolToVisibility}}" >Rozpocznij</Button>
 
         
         

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -90,8 +91,47 @@ namespace Racing.ViewModels
             NotifyPropertyChanged("StartButtonIsVisible");
         }
 
+        private void NotifyAboutXLineChange()
+        {
+            for (int i = 0; i < _cars.Length; i++)
+            {
+                _cars[i].Move();
+                if (i == 0)
+                    NotifyPropertyChanged("OrangeCarActualPositionX");
+                if (i == 1)
+                    NotifyPropertyChanged("BlueCarActualPositionX");
+                if (i == 2)
+                    NotifyPropertyChanged("YellowCarActualPositionX");
+                else
+                    NotifyPropertyChanged("RedCarActualPositionX");
+            }
+        }
+        public void ShowMessageBoxForWinner()
+        {
+            string winnerText = "Wygrało ";
+            foreach (var car in _cars)
+            {
+                if (car.IsWinner)
+                    winnerText += car.Name;
+            }
+            MessageBox.Show(winnerText);
+        }
 
-        public bool StartButtonIsVisible { get; set;}
+        public bool StartButtonIsVisible { get; set; }
+
+        public void MoveCarsToStartLine()
+        {
+            foreach (var car in _cars)
+            {
+                car.MoveToStarLine(_startLineCoordinateX);
+                NotifyPropertyChanged("OrangeCarActualPositionX");
+                NotifyPropertyChanged("BlueCarActualPositionX");
+                NotifyPropertyChanged("YellowCarActualPositionX");
+                NotifyPropertyChanged("RedCarActualPositionX");
+            }
+        }
+
+
 
         public RaceViewModel()
         {
@@ -114,27 +154,13 @@ namespace Racing.ViewModels
         public async void Move(object parameter)
         {
             HideStartButton();
-            while (!_cars.Any(x => x.Win(_finishLineCoordinateX)))
+            while (!_cars.Any(x => x.IfWin(_finishLineCoordinateX)))
             {
-                
-                await Task.Delay(15);
-                for (int i = 0; i < _cars.Length; i++)
-                {
-                    _cars[i].Move();
-                    if (i == 0)
-                        NotifyPropertyChanged("OrangeCarActualPositionX");
-                    if (i == 1)
-                        NotifyPropertyChanged("BlueCarActualPositionX");
-                    if (i == 2)
-                        NotifyPropertyChanged("YellowCarActualPositionX");
-                    else
-                        NotifyPropertyChanged("RedCarActualPositionX");
-                }
-                
-
-
-
+                await Task.Delay(2);
+                NotifyAboutXLineChange();
             }
+            ShowMessageBoxForWinner();
+            MoveCarsToStartLine();
             ShowStartButton();
         }
 
