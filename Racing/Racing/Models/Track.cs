@@ -10,7 +10,13 @@ namespace Racing.Models
     {
         public int FinishLineCoordinateX { get; set; }
         public int StartLineCoordinateX { get; set; }
-
-
     }
+    public enum TrackYPosition
+    {
+        OrangeTrack = 50,
+        BlueTrack = 100,
+        YellowTrack = 150,
+        RedTrack = 200,
+    }
+
 }

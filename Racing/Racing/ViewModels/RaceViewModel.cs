@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Collections.ObjectModel;
 
 namespace Racing.ViewModels
 {
@@ -131,7 +132,7 @@ namespace Racing.ViewModels
             }
         }
 
-
+        public ObservableCollection<Bonus> _bonuses { get; set; }
 
         public RaceViewModel()
         {
@@ -159,6 +160,12 @@ namespace Racing.ViewModels
                 await Task.Delay(2);
                 NotifyAboutXLineChange();
             }
+
+
+
+
+
+
             ShowMessageBoxForWinner();
             MoveCarsToStartLine();
             ShowStartButton();
