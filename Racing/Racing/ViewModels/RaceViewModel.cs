@@ -79,8 +79,23 @@ namespace Racing.ViewModels
             }
         }
 
+        private void ShowStartButton()
+        {
+            StartButtonIsVisible = true;
+            NotifyPropertyChanged("StartButtonIsVisible");
+        }
+        private void HideStartButton()
+        {
+            StartButtonIsVisible = false;
+            NotifyPropertyChanged("StartButtonIsVisible");
+        }
+
+
+        public bool StartButtonIsVisible { get; set;}
+
         public RaceViewModel()
         {
+            StartButtonIsVisible = true;
             _finishLineCoordinateX = 1100;
             _startLineCoordinateX = 3;
             _track = new Track() { StartLineCoordinateX = _startLineCoordinateX, FinishLineCoordinateX = _finishLineCoordinateX };
@@ -91,32 +106,36 @@ namespace Racing.ViewModels
             _cars[3] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 228, Name = "Czerwone Auto" };
 
             StartRaceCommand = new RelayCommand(Move);
+
+
         }
         public ICommand StartRaceCommand { get; set; }
 
-        public void Move(object parameter)
+        public async void Move(object parameter)
         {
+            HideStartButton();
             while (!_cars.Any(x => x.Win(_finishLineCoordinateX)))
             {
-                var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-                timer.Start();
-                timer.Tick += (sender, args) => {
-                    for (int i = 0; i < _cars.Length; i++)
-                    {
-                        _cars[i].Move();
-                        if (i == 0)
-                            NotifyPropertyChanged("OrangeCarActualPositionX");
-                        if (i == 1)
-                            NotifyPropertyChanged("BlueCarActualPositionX");
-                        if (i == 2)
-                            NotifyPropertyChanged("YellowCarActualPositionX");
-                        else
-                            NotifyPropertyChanged("RedCarActualPositionX");
-                    }
-                };
+                
+                await Task.Delay(15);
+                for (int i = 0; i < _cars.Length; i++)
+                {
+                    _cars[i].Move();
+                    if (i == 0)
+                        NotifyPropertyChanged("OrangeCarActualPositionX");
+                    if (i == 1)
+                        NotifyPropertyChanged("BlueCarActualPositionX");
+                    if (i == 2)
+                        NotifyPropertyChanged("YellowCarActualPositionX");
+                    else
+                        NotifyPropertyChanged("RedCarActualPositionX");
+                }
+                
+
+
 
             }
-
+            ShowStartButton();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

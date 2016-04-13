@@ -3,6 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="330" Width="1100" 
     >
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+    </Window.Resources>
     <Grid Background="{StaticResource BackgroundImage}">
         <Image Source="Content/Banana.png" Width="103" Height="54"></Image>
         <Image Source="Content/Coin.png" Width="103" Height="54"></Image>
@@ -18,8 +21,10 @@
         <Canvas>
             <Image Source="Content/Car4.png" Width="103" Height="54" Canvas.Left="{Binding YellowCarActualPositionX}" Canvas.Top="{Binding YellowCarActualPositionY}"></Image>
         </Canvas>
+
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Command="{Binding StartRaceCommand}" Visibility="{Binding Path=StarButtonIsVisible, Converter={StaticResource BoolToVisibility}}" >Rozpocznij</Button>
+
         
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Command="{Binding StartRaceCommand}">Rozpocznij</Button>
         
     </Grid>
 </Window>
