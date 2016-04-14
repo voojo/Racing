@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace Racing.Models
 {
-    abstract class Bonus
+    public abstract class Bonus
     {
-        private int _positionX;
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public int Length { get; set; }
+
         private TrackYPosition _positionY;
-        public void GenerateCoordinates(int lengthOfTruck)
+
+        public Bonus(int lengthOfTruck, Random random)
         {
-            Random random = new Random();
             var randomNumberY = random.Next(1, 5);
 
             if (randomNumberY == 1)
@@ -24,18 +27,37 @@ namespace Racing.Models
             else
                 _positionY = TrackYPosition.RedTrack;
 
-            Random random2 = new Random();
-            var randomNumberX = random2.Next(0, lengthOfTruck);
-            _positionX = randomNumberX;
-
-
+            var randomNumberX = random.Next(0, lengthOfTruck);
+            PositionX = randomNumberX;
+            PositionY = (int)_positionY;
         }
 
-        public class Banana : Bonus
+        public abstract int GetExtraSpeed();
+    }
+    public class Banana : Bonus
+    {
+        public Banana(int lengthOfTruck, Random random)
+            : base(lengthOfTruck, random)
         {
+            Length = 103;
         }
-        public class Coin : Bonus
+
+        public override int GetExtraSpeed()
         {
+            return -50;
+        }
+    }
+    public class Coin : Bonus
+    {
+        public Coin(int lengthOfTruck, Random random)
+            : base(lengthOfTruck, random)
+        {
+            Length = 103;
+        }
+
+        public override int GetExtraSpeed()
+        {
+            return 50;
         }
     }
 }

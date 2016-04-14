@@ -8,15 +8,14 @@ namespace Racing.Models
 {
     class Car
     {
-        private int _carLength;
+        public int CarLength { get; set; }
         public string Name { get; set; }
         public int ActualCoordinateX { get; set; }
         public int ActualCoordinateY { get; set; }
         public bool IsWinner { get; set; }
-        public void Move()
+        public void Move(Random random)
         {
-            Random random = new Random();
-            ActualCoordinateX += random.Next(1, 5);
+            ActualCoordinateX += random.Next(1, 10);
         }
         public void MoveToStarLine(int startline)
         {
@@ -25,12 +24,12 @@ namespace Racing.Models
 
         public bool IfWin(int finishline)
         {
-            IsWinner = ActualCoordinateX >= finishline - _carLength;
+            IsWinner = ActualCoordinateX >= finishline - CarLength;
             return IsWinner;
         }
         public Car()
         {
-            _carLength = 103;
+            CarLength = 103;
         }
 
 

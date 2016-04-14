@@ -1,14 +1,31 @@
 ﻿<Window x:Class="Racing.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="330" Width="1100" 
-    >
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Racing.ViewModels"
+        xmlns:models="clr-namespace:Racing.Models"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="330" Width="1100" d:DataContext="{viewModels:RaceViewModel}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <DataTemplate DataType="{x:Type models:Coin}">
+            <Canvas>
+                <Image Source="Content/Coin.png" Width="103" Height="54" Canvas.Left="{Binding PositionX}" Canvas.Top="{Binding PositionY}"></Image>
+            </Canvas>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type models:Banana}">
+            <Canvas>
+                <Image Source="Content/Banana.png" Width="103" Height="54" Canvas.Left="{Binding PositionX}" Canvas.Top="{Binding PositionY}"></Image>
+            </Canvas>
+        </DataTemplate>
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundImage}">
-        <Image Source="Content/Banana.png" Width="103" Height="54"></Image>
-        <Image Source="Content/Coin.png" Width="103" Height="54"></Image>
+
+        <ItemsControl ItemsSource="{Binding Bonuses}">
+
+        </ItemsControl>
+
         <Canvas>
             <Image Source="Content/Car.png" Width="103" Height="54" Canvas.Left="{Binding OrangeCarActualPositionX}" Canvas.Top="{Binding OrangeCarActualPositionY}" ></Image>
         </Canvas>
@@ -24,7 +41,7 @@
 
         <Button HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Command="{Binding StartRaceCommand}" Visibility="{Binding Path=StartButtonIsVisible, Converter={StaticResource BoolToVisibility}}" >Rozpocznij</Button>
 
-        
-        
+
+
     </Grid>
 </Window>

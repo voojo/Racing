@@ -92,11 +92,12 @@ namespace Racing.ViewModels
             NotifyPropertyChanged("StartButtonIsVisible");
         }
 
-        private void NotifyAboutXLineChange()
+        private void NotifyAboutXLineChange(Random random)
         {
             for (int i = 0; i < _cars.Length; i++)
             {
-                _cars[i].Move();
+                _cars[i].Move(random);
+                CheckBonus(_cars[i]);
                 if (i == 0)
                     NotifyPropertyChanged("OrangeCarActualPositionX");
                 if (i == 1)
@@ -107,6 +108,24 @@ namespace Racing.ViewModels
                     NotifyPropertyChanged("RedCarActualPositionX");
             }
         }
+
+        private void CheckBonus(Car car)
+        {
+            Bonus bonusToDelete = null;
+            foreach (var bonus in Bonuses)
+            {
+                if (bonus.PositionY == car.ActualCoordinateY)
+                    if (car.ActualCoordinateX + car.CarLength <= bonus.PositionX + bonus.Length + 30 &&
+                        car.ActualCoordinateX + car.CarLength >= bonus.PositionX + 30)
+                    {
+                        car.ActualCoordinateX += bonus.GetExtraSpeed();
+                        bonusToDelete = bonus;
+                    }
+            }
+            if (bonusToDelete != null)
+                Bonuses.Remove(bonusToDelete);
+        }
+
         public void ShowMessageBoxForWinner()
         {
             string winnerText = "Wygrało ";
@@ -132,7 +151,7 @@ namespace Racing.ViewModels
             }
         }
 
-        public ObservableCollection<Bonus> _bonuses { get; set; }
+        public ObservableCollection<Bonus> Bonuses { get; set; }
 
         public RaceViewModel()
         {
@@ -141,34 +160,61 @@ namespace Racing.ViewModels
             _startLineCoordinateX = 3;
             _track = new Track() { StartLineCoordinateX = _startLineCoordinateX, FinishLineCoordinateX = _finishLineCoordinateX };
             _cars = new Car[4];
-            _cars[0] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 12, Name = "Pomaranczowe Auto" };
-            _cars[1] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 80, Name = "Niebieskie Auto" };
-            _cars[2] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 157, Name = "Zolte Auto" };
-            _cars[3] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 228, Name = "Czerwone Auto" };
+            _cars[0] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 10, Name = "Pomaranczowe Auto" };
+            _cars[1] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 90, Name = "Niebieskie Auto" };
+            _cars[2] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 150, Name = "Zolte Auto" };
+            _cars[3] = new Car() { ActualCoordinateX = _track.StartLineCoordinateX, ActualCoordinateY = 230, Name = "Czerwone Auto" };
 
             StartRaceCommand = new RelayCommand(Move);
 
-
+            Bonuses = new ObservableCollection<Bonus>();
         }
         public ICommand StartRaceCommand { get; set; }
 
         public async void Move(object parameter)
         {
+            Random random = new Random();
             HideStartButton();
+
             while (!_cars.Any(x => x.IfWin(_finishLineCoordinateX)))
             {
-                await Task.Delay(2);
-                NotifyAboutXLineChange();
+                await Task.Delay(30);
+                NotifyAboutXLineChange(random);
+                RandomBonus(random);
             }
-
-
-
-
-
 
             ShowMessageBoxForWinner();
             MoveCarsToStartLine();
+            ClearBonusesList();
             ShowStartButton();
+        }
+
+        private void StaticBonus()
+        {
+            Banana banana = new Banana(_finishLineCoordinateX, new Random());
+            banana.PositionX = 500;
+            banana.PositionY = 90;
+            Bonuses.Add(banana);
+        }
+
+        private void ClearBonusesList()
+        {
+            Bonuses.Clear();
+        }
+
+        private void RandomBonus(Random random)
+        {
+            var randomNumber = random.Next(0, 80);
+            if (randomNumber != 5)
+                return;
+
+            randomNumber = random.Next(0, 2);
+
+            if (randomNumber == 0)
+                Bonuses.Add(new Banana(_finishLineCoordinateX, random));
+            else
+                Bonuses.Add(new Coin(_finishLineCoordinateX, random));
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
